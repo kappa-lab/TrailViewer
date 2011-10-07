@@ -30,7 +30,7 @@ package
             srtmLoader.load(srtmReq);
             
         }
-        static public function genSrtmFromLazyGPX(path:String):void
+        static public function genSrtmFromLazyGPX(path:String,callBack:Function=null):void
         {
             trace("genSrtmFromLazyGPX",path)
             var loader:URLLoader = new URLLoader();
@@ -47,7 +47,7 @@ package
                 }
 
                 getSRTM(lat,lon,function(ele:Array):void{
-                    var xml2=<gpx><trk><trkseg><trkpt/></trkseg></trk></gpx>;
+                    var xml2:XML=<gpx><trk><trkseg><trkpt/></trkseg></trk></gpx>;
                     var n:uint= ele.length;
                     var lat1:Number = trkpts[0].attribute("lat");
                     var lon1:Number = trkpts[0].attribute("lon");
@@ -65,6 +65,7 @@ package
                         lon1=lon2;
                         xml2.trk.trkseg.trkpt[i] = trkpt2;
                     }
+                    if(callBack!=null)callBack(xml2);
                     trace(xml2)
                 });
                 
